@@ -6,15 +6,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class BusinessException extends RuntimeException {
-    /**
-     * 错误码
-     */
+public class BusinessException extends RuntimeException{
+
+    //错误码
     private Integer code;
-    /**
-     * 错误消息
-     */
+    //错误消息
     private String message;
+
     /**
      *
      * @param message 错误消息
@@ -64,5 +62,4 @@ public class BusinessException extends RuntimeException {
         this.message = resultCodeEnum.getMessage();
         this.code = resultCodeEnum.getCode();
     }
-
 }

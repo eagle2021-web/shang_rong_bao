@@ -12,8 +12,23 @@ spring:
     url: jdbc:mysql://localhost:3306/db200921_srb_core?serverTimezone=GMT%2B8&characterEncoding=utf-8
     username: root
     password: 123456
-
+  redis:
+    host: redis_local
+    port: 6379
+    database: 0
+#    password: 123456 #默认为空
+    timeout: 3000ms #最大等待时间，超时则抛出异常，否则请求一直等待
+    lettuce:
+      pool:
+        max-active: 20  #最大连接数，负值表示没有限制，默认8
+        max-wait: -1    #最大阻塞等待时间，负值表示没限制，默认-1
+        max-idle: 8     #最大空闲连接，默认8
+        min-idle: 0     #最小空闲连接，默认0
 mybatis-plus: #mybatis
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath:com/atguigu/srb/core/mapper/xml/*.xml
+  mapper-locations: classpath:com/eagle/srb/core/mapper/xml/*.xml
+## 设置日志级别 在logback文件专门配置
+#logging:
+#  level:
+#    root: ERROR

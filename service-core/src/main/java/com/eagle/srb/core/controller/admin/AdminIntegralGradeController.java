@@ -1,23 +1,28 @@
 package com.eagle.srb.core.controller.admin;
 
 
-import com.eagle.common.exception.BusinessException;
+import com.eagle.common.exception.Assert;
+import com.eagle.common.result.R;
 import com.eagle.common.result.ResponseEnum;
 import com.eagle.srb.core.pojo.entity.IntegralGrade;
 import com.eagle.srb.core.service.IntegralGradeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import com.eagle.common.result.R;
 
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * @author eagle2020
+ */
 @Api(tags = "积分等级管理")
 @CrossOrigin
 @RestController
 @RequestMapping("/admin/core/integralGrade")
+@Slf4j
 public class AdminIntegralGradeController {
     @Resource
     private IntegralGradeService integralGradeService;
@@ -26,6 +31,9 @@ public class AdminIntegralGradeController {
     @GetMapping("/list")
     public R ListAll() {
         // http://localhost:8110/admin/core/integralGrade/list
+        log.info("info");
+        log.warn("warn");
+        log.error("error");
         List<IntegralGrade> list = integralGradeService.list();
         return R.ok().data("list", list).message("获取列表成功");
     }
@@ -44,9 +52,10 @@ public class AdminIntegralGradeController {
     @ApiOperation(value = "新增积分等级")
     @PostMapping("/save")
     public R save(@ApiParam(value = "积分等级对象", required = true) @RequestBody IntegralGrade integralGrade) {
-        if(integralGrade.getBorrowAmount() == null){
-            throw new BusinessException(ResponseEnum.BORROW_AMOUNT_NULL_ERROR);
-        }
+        Assert.notNull(integralGrade.getBorrowAmount(), ResponseEnum.BORROW_AMOUNT_NULL_ERROR);
+ //        if(integralGrade.getBorrowAmount() == null){
+//            throw new BusinessException(ResponseEnum.BORROW_AMOUNT_NULL_ERROR);
+//        }
         boolean save = integralGradeService.save(integralGrade);
         return save ? R.ok().message("保存成功") : R.error().message("保存失败");
     }

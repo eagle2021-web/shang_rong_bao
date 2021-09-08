@@ -7,9 +7,10 @@ import java.util.Map;
 
 @Data
 public class R {
+
     private Integer code;
     private String message;
-    private Map<String, Object> data = new HashMap();
+    private Map<String, Object> data = new HashMap<>();
 
     /**
      * 构造函数私有化
@@ -49,20 +50,35 @@ public class R {
         r.setMessage(responseEnum.getMessage());
         return r;
     }
+
     public R data(String key, Object value){
         this.data.put(key, value);
         return this;
     }
+
     public R data(Map<String, Object> map){
         this.setData(map);
         return this;
     }
+
+    /**
+     * 设置特定的响应消息
+     * @param message
+     * @return
+     */
     public R message(String message){
         this.setMessage(message);
         return this;
     }
+
+
+    /**
+     * 设置特定的响应码
+     * @param code
+     * @return
+     */
     public R code(Integer code){
-        this.code = code;
+        this.setCode(code);
         return this;
     }
 }
