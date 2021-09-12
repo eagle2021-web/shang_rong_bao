@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class ServiceCoreApplication {
     /**
      * http://localhost:8110/swagger-ui.html 打开swagger
+     * http://localhost:8110/doc.html 打开swagger token
      * @param args 0
      */
     public static void main(String[] args) {

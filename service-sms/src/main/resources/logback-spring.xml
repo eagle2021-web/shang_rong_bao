@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <contextName>atguiguSrb</contextName>
+    <contextName>eagleSrb</contextName>
 
     <!-- 日志的输出目录 -->
     <property name="log.path" value="D:/project/200921/srb_log/sms" />
@@ -67,14 +67,14 @@
     </appender>
 
     <!-- 日志记录器  -->
-<!--    <logger name="com.atguigu" level="INFO">-->
+<!--    <logger name="com.eagle" level="INFO">-->
 <!--        <appender-ref ref="CONSOLE" />-->
 <!--        <appender-ref ref="FILE" />-->
 <!--    </logger>-->
 
     <!-- 开发环境和测试环境 -->
     <springProfile name="dev,test">
-        <logger name="com.atguigu" level="INFO">
+        <logger name="com.eagle" level="INFO">
             <appender-ref ref="CONSOLE" />
             <appender-ref ref="ROLLING_FILE" />
         </logger>
@@ -82,7 +82,7 @@
 
     <!-- 生产环境 -->
     <springProfile name="prod">
-        <logger name="com.atguigu" level="ERROR">
+        <logger name="com.eagle" level="ERROR">
             <appender-ref ref="CONSOLE" />
             <appender-ref ref="FILE" />
         </logger>

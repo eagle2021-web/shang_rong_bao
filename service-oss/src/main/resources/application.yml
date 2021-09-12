@@ -10,6 +10,6 @@ spring:
 aliyun:
   oss:
     endpoint: oss-cn-beijing.aliyuncs.com
-    keyId: LTAI5tMun58e555
-    keySecret: ViRzpQvn76QgS0Y42e
+    keyId: LTAI5tMun58VHwvJoBg487w2
+    keySecret: ViRzpQvn76QgS0Y42aSs2sxUpSSFxq
     bucketName: srb-file-200921-eagle

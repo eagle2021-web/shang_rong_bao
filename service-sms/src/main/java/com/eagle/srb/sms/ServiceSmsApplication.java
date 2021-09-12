@@ -6,8 +6,9 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan({"com.eagle.srb", "com.eagle.common"})
+//@EnableFeignClients
 public class ServiceSmsApplication {
-
+    //http://localhost:8120/swagger-ui.html 打开swagger
     public static void main(String[] args) {
         SpringApplication.run(ServiceSmsApplication.class, args);
     }
