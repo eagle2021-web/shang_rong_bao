@@ -74,7 +74,7 @@
 
     <!-- 开发环境和测试环境 -->
     <springProfile name="dev,test">
-        <logger name="com.eagle" level="INFO">
+        <logger name="com.eagle" level="DEBUG">
             <appender-ref ref="CONSOLE" />
             <appender-ref ref="ROLLING_FILE" />
         </logger>

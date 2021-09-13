@@ -5,6 +5,7 @@ import com.eagle.common.result.R;
 import com.eagle.common.result.ResponseEnum;
 import com.eagle.common.util.RandomUtils;
 import com.eagle.common.util.RegexValidateUtils;
+import com.eagle.srb.sms.client.CoreUserInfoClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,8 +29,8 @@ public class ApiSmsController {
     @Resource
     private RedisTemplate redisTemplate;
 
-//    @Resource
-//    private CoreUserInfoClient coreUserInfoClient;
+    @Resource
+    private CoreUserInfoClient coreUserInfoClient;
 
     @ApiOperation("获取验证码")
     @GetMapping("/send/{mobile}")
@@ -43,9 +44,12 @@ public class ApiSmsController {
         Assert.isTrue(RegexValidateUtils.checkCellphone(mobile), ResponseEnum.MOBILE_ERROR);
 
         //判断手机号是否已经注册
-//        boolean result = coreUserInfoClient.checkMobile(mobile);
-//        log.info("result = " + result);
-//         Assert.isTrue(result == false, ResponseEnum.MOBILE_EXIST_ERROR);
+        R r = coreUserInfoClient.checkMobile(mobile);
+        log.info("result = " + r.getData());
+        log.info("isExist = {}", r.getData().get("isExist"));
+        boolean result = (boolean)r.getData().get("isExist");
+        log.info("result = {}", result == true);
+         Assert.isTrue(result == false, ResponseEnum.MOBILE_EXIST_ERROR);
 
         String code = RandomUtils.getFourBitRandom();
         HashMap<String, Object> map = new HashMap<>();

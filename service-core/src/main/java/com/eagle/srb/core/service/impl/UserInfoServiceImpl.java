@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eagle.common.exception.Assert;
+import com.eagle.common.result.R;
 import com.eagle.common.result.ResponseEnum;
 import com.eagle.common.util.MD5;
 import com.eagle.srb.base.util.JwtUtils;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 
 /**
  * <p>
@@ -89,7 +91,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         Assert.notNull(userInfo, ResponseEnum.LOGIN_MOBILE_ERROR);
 
         //密码是否正确
-        log.info("验证用户是否存在");
+        log.info("验证密码是否正确");
         Assert.equals(MD5.encrypt(password), userInfo.getPassword(), ResponseEnum.LOGIN_PASSWORD_ERROR);
 
         //用户是否被禁用
@@ -124,7 +126,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public IPage<UserInfo> listPage(Page<UserInfo> pageParam, UserInfoQuery userInfoQuery) {
 
-        if(userInfoQuery == null){
+        if (userInfoQuery == null) {
             return baseMapper.selectPage(pageParam, null);
         }
 
@@ -160,6 +162,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         userInfo.setId(id);
         userInfo.setStatus(status);
         baseMapper.updateById(userInfo);
+    }
+
+    @Override
+    public R checkMobile(String mobile) {
+        QueryWrapper<UserInfo> wrapper = new QueryWrapper<>();
+        wrapper.eq("mobile", mobile);
+        Integer i = baseMapper.selectCount(wrapper);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("isExist", i > 0);
+        return R.ok().data(map);
     }
 
 }

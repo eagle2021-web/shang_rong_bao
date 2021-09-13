@@ -34,7 +34,7 @@ public class UserInfoController {
 
     @ApiOperation("会员注册")
     @PostMapping("/register")
-    public R register(@RequestBody RegisterVO registerVO){
+    public R register(@RequestBody RegisterVO registerVO) {
 
         String mobile = registerVO.getMobile();
         String password = registerVO.getPassword();
@@ -46,7 +46,7 @@ public class UserInfoController {
         Assert.isTrue(RegexValidateUtils.checkCellphone(mobile), ResponseEnum.MOBILE_ERROR);
 
         //校验验证码是否正确
-        String codeGen = (String)redisTemplate.opsForValue().get("srb:sms:code:" + mobile);
+        String codeGen = (String) redisTemplate.opsForValue().get("srb:sms:code:" + mobile);
 //        String codeGen = redisTemplate.opsForValue().get("srb:sms:code:" + mobile);
         Assert.equals(code, codeGen, ResponseEnum.CODE_ERROR);
 
@@ -55,9 +55,10 @@ public class UserInfoController {
 
         return R.ok().message("注册成功");
     }
+
     @ApiOperation("会员登录")
     @PostMapping("/login")
-    public R login(@RequestBody LoginVO loginVO, HttpServletRequest request){
+    public R login(@RequestBody LoginVO loginVO, HttpServletRequest request) {
 
         String mobile = loginVO.getMobile();
         String password = loginVO.getPassword();
@@ -79,12 +80,17 @@ public class UserInfoController {
         log.info("token = {}", token);
         boolean result = JwtUtils.checkToken(token);
 
-        if(result){
+        if (result) {
             return R.ok();
-        }else{
+        } else {
             return R.setResult(ResponseEnum.LOGIN_AUTH_ERROR);
         }
+    }
 
+    @ApiOperation("校验手机号是否注册")
+    @GetMapping("/checkMobile/{mobile}")
+    public R checkMobile(@PathVariable String mobile) {
+        return userInfoService.checkMobile(mobile);
     }
 }
 
