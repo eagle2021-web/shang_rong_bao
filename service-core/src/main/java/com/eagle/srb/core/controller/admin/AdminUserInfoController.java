@@ -20,14 +20,13 @@ import javax.annotation.Resource;
  * 用户基本信息 前端控制器
  * </p>
  *
- * @author Helen
- * @since 2021-02-20
+ * @author eagle2020
+ * @since 2021-09-11
  */
 @Api(tags = "会员管理")
 @RestController
 @RequestMapping("/admin/core/userInfo")
 @Slf4j
-@CrossOrigin
 public class AdminUserInfoController {
 
     @Resource
@@ -40,7 +39,7 @@ public class AdminUserInfoController {
             @PathVariable Long page,
             @ApiParam(value = "每页记录数", required = true)
             @PathVariable Long limit,
-            @ApiParam(value = "查询对象", required = false)
+            @ApiParam(value = "查询对象")
                     UserInfoQuery userInfoQuery
     ) {
         log.info("前端分页请求进来");

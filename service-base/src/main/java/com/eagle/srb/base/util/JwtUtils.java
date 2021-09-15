@@ -10,6 +10,9 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
 
+/**
+ * @author eagle2020
+ */
 public class JwtUtils {
 
     private static long tokenExpiration = 24*60*60*1000;
