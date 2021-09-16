@@ -5,5 +5,5 @@ package com.eagle.srb.core.controller.api;
  * @date 2021/9/16
  */
 public class Test {
-    final Integer A = 1;
+    final Integer A = 2;
 }
