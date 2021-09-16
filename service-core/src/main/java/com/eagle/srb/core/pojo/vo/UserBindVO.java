@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ * @author eagle2020
+ */
 @Data
 @ApiModel(description = "账户绑定")
 public class UserBindVO {
