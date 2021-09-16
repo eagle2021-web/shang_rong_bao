@@ -1,0 +1,47 @@
+server:
+  port: 8120 # 服务端口
+
+spring:
+  profiles:
+    active: dev # 环境设置
+  application:
+    name: service-sms # 服务名
+
+  #spring:
+  redis:
+    host: redis_local
+    port: 6379
+    database: 0
+#    password: 123456 #默认为空
+    timeout: 3000ms #最大等待时间，超时则抛出异常，否则请求一直等待
+    lettuce:
+      pool:
+        max-active: 20  #最大连接数，负值表示没有限制，默认8
+        max-wait: -1    #最大阻塞等待时间，负值表示没限制，默认-1
+        max-idle: 8     #最大空闲连接，默认8
+        min-idle: 0     #最小空闲连接，默认0
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+#阿里云短信
+#aliyun:
+#  sms:
+#    region-id: cn-hangzhou
+#    key-id: LTAI4G5Svnb2TWBMuKnNT6jY
+#    key-secret: N7v6R4V3EJ1SGDZlsqtqo8QyVVMmtQ
+#    template-code: SMS_96695065
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000 #连接超时
+        readTimeout: 65000 #执行超时
+#    sign-name: 谷粒
+  # 开启Feign对Sentinel的支持
+  # feign
+  sentinel:
+    enabled: true
+
+logging:
+  level:
+    com.eagle.srb.sms.client.CoreUserInfoClient: DEBUG #以什么级别监控哪个接口
