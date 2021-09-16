@@ -1,7 +1,9 @@
 package com.eagle.srb.core.controller.api;
 
+import com.alibaba.fastjson.JSON;
 import com.eagle.common.result.R;
 import com.eagle.srb.base.util.JwtUtils;
+import com.eagle.srb.core.hfb.RequestHelper;
 import com.eagle.srb.core.pojo.vo.UserBindVO;
 import com.eagle.srb.core.service.UserBindService;
 import io.swagger.annotations.Api;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * @author eagle2020
@@ -36,5 +39,21 @@ public class UserBindController {
         // 根据userId做账户绑定
         String formStr = userBindService.commitBindUser(userBindVO, userId);
         return R.ok().data("formStr", formStr);
+    }
+
+    @SuppressWarnings("SpringMVCViewInspection")
+    @ApiOperation("账户绑定异步回调")
+    @PostMapping("/notify")
+    public String notify(HttpServletRequest request){
+        Map<String, Object> paramMap = RequestHelper.switchMap(request.getParameterMap());
+        log.info("paramMap = " + JSON.toJSONString(paramMap));
+        //校验签名
+        if(!RequestHelper.isSignEquals(paramMap)){
+            log.error("用户账号绑定异步回调时的签名验证反馈为错误 = " + JSON.toJSONString(paramMap));
+            return "fail";
+        }
+        log.info("校验前面成功！");
+        userBindService.notify(paramMap);
+        return "success";
     }
 }

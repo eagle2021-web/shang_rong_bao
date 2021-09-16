@@ -67,11 +67,11 @@
 
     </appender>
 
-    <!-- 日志记录器  -->
-    <!--    <logger name="com.eagle" level="INFO">-->
-    <!--        <appender-ref ref="CONSOLE" />-->
-    <!--        <appender-ref ref="FILE" />-->
-    <!--    </logger>-->
+     日志记录器
+        <logger name="com.eagle" level="INFO">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </logger>
 
     <!-- 开发环境和测试环境 -->
     <springProfile name="dev,test">

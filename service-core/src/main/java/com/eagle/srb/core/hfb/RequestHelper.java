@@ -51,6 +51,8 @@ public class RequestHelper {
      * @return
      */
     public static Map<String, Object> switchMap(Map<String, String[]> paramMap) {
+        log.info("1111111111111111");
+        log.info("Map<String, String[]> paramMap = " + paramMap);
         Map<String, Object> resultMap = new HashMap<>(16);
         for (Map.Entry<String, String[]> param : paramMap.entrySet()) {
             resultMap.put(param.getKey(), param.getValue()[0]);
