@@ -7,4 +7,5 @@ package com.eagle.srb.core.controller.api;
 public class Test {
     final Integer A = 2;
     String C = "cc";
+    String b = "aa";
 }
