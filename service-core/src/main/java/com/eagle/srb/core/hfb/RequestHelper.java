@@ -10,11 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * @author eagle2020
+ */
 @Slf4j
 public class RequestHelper {
-
+    final static String SIGN = "sign";
     public static void main(String[] args) {
-        Map<String, Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap(4);
         paramMap.put("d", "4");
         paramMap.put("b", "2");
         paramMap.put("c", "3");
@@ -23,12 +26,12 @@ public class RequestHelper {
 
     /**
      * 请求数据获取签名
-     * @param paramMap
+     * @param paramMap 传给汇付宝的参数集合
      * @return
      */
     public static String getSign(Map<String, Object> paramMap) {
-        if(paramMap.containsKey("sign")) {
-            paramMap.remove("sign");
+        if(paramMap.containsKey(SIGN)) {
+            paramMap.remove(SIGN);
         }
         TreeMap<String, Object> sorted = new TreeMap<>(paramMap);
         StringBuilder str = new StringBuilder();
@@ -48,7 +51,7 @@ public class RequestHelper {
      * @return
      */
     public static Map<String, Object> switchMap(Map<String, String[]> paramMap) {
-        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>(16);
         for (Map.Entry<String, String[]> param : paramMap.entrySet()) {
             resultMap.put(param.getKey(), param.getValue()[0]);
         }

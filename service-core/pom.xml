@@ -12,11 +12,11 @@
     <artifactId>service-core</artifactId>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>com.eagle</groupId>-->
-<!--            <artifactId>eagle-common</artifactId>-->
-<!--            <version>0.0.1-SNAPSHOT</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.eagle</groupId>-->
+        <!--            <artifactId>eagle-common</artifactId>-->
+        <!--            <version>0.0.1-SNAPSHOT</version>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -87,7 +87,7 @@
         </dependency>
     </dependencies>
     <build>
-<!--        项目打包时会将Java目录中的*.xml文件也进行打包-->
+        <!--        项目打包时会将Java目录中的*.xml文件也进行打包-->
         <resources>
             <resource>
                 <directory>src/main/java</directory>

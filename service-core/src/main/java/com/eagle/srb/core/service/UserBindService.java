@@ -2,6 +2,7 @@ package com.eagle.srb.core.service;
 
 import com.eagle.srb.core.pojo.entity.UserBind;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.eagle.srb.core.pojo.vo.UserBindVO;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserBindService extends IService<UserBind> {
 
+    String commitBindUser(UserBindVO userBindVO, Long userId);
 }
