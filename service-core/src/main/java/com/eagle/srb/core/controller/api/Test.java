@@ -6,4 +6,6 @@ package com.eagle.srb.core.controller.api;
  */
 public class Test {
     String b = "aaaa";
+    final Integer A = 2;
+    String C = "cc";
 }
