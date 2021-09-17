@@ -5,6 +5,7 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.CannedAccessControlList;
 import com.eagle.srb.oss.service.FileService;
 import com.eagle.srb.oss.util.OssProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class FileServiceImpl implements FileService {
 
     /**
@@ -50,6 +52,7 @@ public class FileServiceImpl implements FileService {
 
         //文件的url地址
         //https:// bucketname   .  endpoint / + key
+        log.info("url = " + key);
         return "https://" + OssProperties.BUCKET_NAME + "." + OssProperties.ENDPOINT + "/" + key;
     }
 

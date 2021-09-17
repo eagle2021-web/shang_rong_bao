@@ -7,9 +7,6 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * @author eagle2020
- */
 @Data
 @ApiModel(description="借款人认证信息")
 public class BorrowerVO {
