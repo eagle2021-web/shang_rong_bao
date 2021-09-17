@@ -4,25 +4,27 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.eagle.srb.core.mapper.DictMapper;
 import com.eagle.srb.core.pojo.dto.ExcelDictDTO;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author eagle2020
+ */
 @Slf4j
+@NoArgsConstructor
 public class ExcelEictDTOlistener extends AnalysisEventListener<ExcelDictDTO> {
     /**
      * 因为ExcelEictDTOlistener 没有被spring管理，所以不能通过Resource注入
      */
     private DictMapper dictMapper;
-    List<ExcelDictDTO> list = new ArrayList();
+    List<ExcelDictDTO> list = new ArrayList<>();
     private static final int BATCH_COUNT = 5;
 
     public ExcelEictDTOlistener(DictMapper dictMapper) {
         this.dictMapper = dictMapper;
-    }
-
-    public ExcelEictDTOlistener() {
     }
 
     @Override

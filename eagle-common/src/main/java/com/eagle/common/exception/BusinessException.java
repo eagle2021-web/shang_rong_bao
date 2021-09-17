@@ -8,9 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BusinessException extends RuntimeException{
 
-    //错误码
+    /**
+     * 错误码
+     */
     private Integer code;
-    //错误消息
+    /**
+     * 错误消息
+     */
     private String message;
 
     /**
@@ -32,7 +36,6 @@ public class BusinessException extends RuntimeException{
     }
 
     /**
-     *
      * @param message 错误消息
      * @param code 错误码
      * @param cause 原始异常对象

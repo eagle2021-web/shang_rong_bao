@@ -19,13 +19,13 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="Dict对象", description="数据字典")
+@ApiModel(value = "Dict对象", description = "数据字典")
 public class ExcelDictDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ExcelProperty("id")
-      @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ExcelProperty("上级id")

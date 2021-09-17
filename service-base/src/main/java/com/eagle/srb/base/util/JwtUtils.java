@@ -13,36 +13,37 @@ import java.util.Date;
 /**
  * @author eagle2020
  */
+@SuppressWarnings("unused")
 public class JwtUtils {
 
-    private static long tokenExpiration = 24*60*60*1000;
-    private static String tokenSignKey = "A1t2g3uigu123456";
+    private static final long TOKEN_EXPIRATION = 24 * 60 * 60 * 1000;
+    private static final String TOKEN_SIGN_KEY = "A1t2g3uigu123456";
 
-    private static Key getKeyInstance(){
+    private static Key getKeyInstance() {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-        byte[] bytes = DatatypeConverter.parseBase64Binary(tokenSignKey);
-        return new SecretKeySpec(bytes,signatureAlgorithm.getJcaName());
+        byte[] bytes = DatatypeConverter.parseBase64Binary(TOKEN_SIGN_KEY);
+        return new SecretKeySpec(bytes, signatureAlgorithm.getJcaName());
     }
 
     public static String createToken(Long userId, String userName) {
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setSubject("SRB-USER")
-                .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
+                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION))
                 .claim("userId", userId)
                 .claim("userName", userName)
                 .signWith(SignatureAlgorithm.HS512, getKeyInstance())
                 .compressWith(CompressionCodecs.GZIP)
                 .compact();
-        return token;
     }
 
     /**
      * 判断token是否有效
-     * @param token
-     * @return
+     *
+     * @param token token字符串
+     * @return token是否有效
      */
     public static boolean checkToken(String token) {
-        if(StringUtils.isEmpty(token)) {
+        if (StringUtils.isEmpty(token)) {
             return false;
         }
         try {
@@ -56,13 +57,13 @@ public class JwtUtils {
 
     public static Long getUserId(String token) {
         Claims claims = getClaims(token);
-        Integer userId = (Integer)claims.get("userId");
+        Integer userId = (Integer) claims.get("userId");
         return userId.longValue();
     }
 
     public static String getUserName(String token) {
         Claims claims = getClaims(token);
-        return (String)claims.get("userName");
+        return (String) claims.get("userName");
     }
 
     public static void removeToken(String token) {
@@ -71,18 +72,18 @@ public class JwtUtils {
 
     /**
      * 校验token并返回Claims
-     * @param token
-     * @return
+     *
+     * @param token token字符串
+     * @return token里专门存储自定义键值对的对象
      */
     private static Claims getClaims(String token) {
-        if(StringUtils.isEmpty(token)) {
+        if (StringUtils.isEmpty(token)) {
             // LOGIN_AUTH_ERROR(-211, "未登录"),
             throw new BusinessException(ResponseEnum.LOGIN_AUTH_ERROR);
         }
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(token);
-            Claims claims = claimsJws.getBody();
-            return claims;
+            return claimsJws.getBody();
         } catch (Exception e) {
             throw new BusinessException(ResponseEnum.LOGIN_AUTH_ERROR);
         }

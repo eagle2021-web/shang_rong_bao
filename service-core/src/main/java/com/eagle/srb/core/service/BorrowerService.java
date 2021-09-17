@@ -2,6 +2,7 @@ package com.eagle.srb.core.service;
 
 import com.eagle.srb.core.pojo.entity.Borrower;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.eagle.srb.core.pojo.vo.BorrowerVO;
 
 /**
  * <p>
@@ -13,4 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BorrowerService extends IService<Borrower> {
 
+    void saveBorrowerVOByUserId(BorrowerVO borrowerVO, Long userId);
+
+    Integer getStatusByUserId(Long userId);
 }

@@ -10,8 +10,8 @@ public class Assert {
     /**
      * 断言对象不为空
      * obj 为空则抛异常
-     * @param obj
-     * @param responseEnum
+     * @param obj 任意对象
+     * @param responseEnum 响应枚举类
      */
     public static void notNull(Object obj, ResponseEnum responseEnum){
         if(obj == null){
@@ -24,11 +24,11 @@ public class Assert {
     /**
      * 断言对象为空
      * 如果对象obj不为空，则抛出异常
-     * @param object
-     * @param responseEnum
+     * @param obj 任意对象
+     * @param responseEnum 响应枚举类
      */
-    public static void isNull(Object object, ResponseEnum responseEnum) {
-        if (object != null) {
+    public static void isNull(Object obj, ResponseEnum responseEnum) {
+        if (obj != null) {
             log.info("obj is not null......");
             throw new BusinessException(responseEnum);
         }

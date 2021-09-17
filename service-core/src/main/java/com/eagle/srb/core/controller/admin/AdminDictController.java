@@ -21,6 +21,9 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.List;
 
+/**
+ * @author eagle2020
+ */
 @Api(tags = "数据字典管理")
 @RestController
 @RequestMapping("/admin/core/dict")

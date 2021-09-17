@@ -34,8 +34,9 @@ public class FileController {
 
             @ApiParam(value = "模块", required = true)
             @RequestParam("module") String module){
-
+        System.out.println(111111111);
         try {
+
             InputStream inputStream = file.getInputStream();
             String originalFilename = file.getOriginalFilename();
             String url = fileService.upload(inputStream, module, originalFilename);
@@ -51,6 +52,7 @@ public class FileController {
     public R remove(
             @ApiParam(value = "要删除的文件", required = true)
             @RequestParam("url") String url){
+        System.out.println(2222);
         fileService.removeFile(url);
         return R.ok().message("删除成功");
     }
