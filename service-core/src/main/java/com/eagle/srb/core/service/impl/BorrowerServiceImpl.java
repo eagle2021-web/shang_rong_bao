@@ -54,8 +54,8 @@ public class BorrowerServiceImpl extends ServiceImpl<BorrowerMapper, Borrower> i
     private UserIntegralMapper userIntegralMapper;
 
     /**
-     * 保存用户提交的信息到borrower数据库
      *
+     * 保存用户提交的信息到borrower数据库，状态改为认证中1，以便后台审核
      * @param borrowerVO 传过来的借款人信息
      * @param userId     登录用户的id
      */

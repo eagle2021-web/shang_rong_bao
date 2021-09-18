@@ -30,7 +30,7 @@ public class R {
 
     /**
      * 返回失败结果
-     * @return
+     * @return 失败结果
      */
     public static R error(){
         R r = new R();

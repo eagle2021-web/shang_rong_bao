@@ -67,6 +67,7 @@ public class UnifiedExceptionhandler {
             AsyncRequestTimeoutException.class
     })
     public R handleServletException(Exception e) {
+        log.error("ExceptionHandler接收并处理");
         log.error(e.getMessage(), e);
         //SERVLET_ERROR(-102, "servlet请求异常"),
         return R.error().message(ResponseEnum.SERVLET_ERROR.getMessage()).code(ResponseEnum.SERVLET_ERROR.getCode());

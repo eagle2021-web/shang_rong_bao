@@ -103,6 +103,7 @@ public class UserBindServiceImpl extends ServiceImpl<UserBindMapper, UserBind> i
         userInfo.setBindCode(bindCode);
         userInfo.setName(userBind.getName());
         userInfo.setIdCard(userBind.getIdCard());
+        userInfo.setBindStatus(UserBindEnum.BIND_OK.getStatus());
         userInfoMapper.updateById(userInfo);
         log.info("成功更新userInfo表的绑定bindCode name 和 idCard");
     }

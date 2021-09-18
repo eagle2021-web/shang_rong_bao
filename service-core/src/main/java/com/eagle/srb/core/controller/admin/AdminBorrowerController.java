@@ -35,6 +35,7 @@ public class AdminBorrowerController {
 
             @ApiParam(value = "查询关键字", required = false)
             @RequestParam String keyword) {
+
         Page<Borrower> pageParam = new Page<>(page, limit);
         IPage<Borrower> pageModel = borrowerService.listPage(pageParam, keyword);
         return R.ok().data("pageModel", pageModel);

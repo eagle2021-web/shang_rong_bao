@@ -27,7 +27,6 @@ public final class HttpUtils {
 	public static byte[] doPost(String strUrl, byte[] reqData) {
 		return send(strUrl, POST, reqData);
 	}
-
 	/**
 	 * get方式发送http请求.
 	 * 
