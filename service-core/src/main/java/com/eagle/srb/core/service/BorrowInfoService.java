@@ -2,8 +2,11 @@ package com.eagle.srb.core.service;
 
 import com.eagle.srb.core.pojo.entity.BorrowInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.eagle.srb.core.pojo.vo.BorrowInfoApprovalVO;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -20,4 +23,10 @@ public interface BorrowInfoService extends IService<BorrowInfo> {
     Integer getStatusByUserId(Long userId);
 
     void saveBorrowInfo(BorrowInfo borrowInfo, Long userId);
+
+    List<BorrowInfo> selectList();
+
+    Map<String, Object> getBorrowInfoDetail(Long id);
+
+    void approval(BorrowInfoApprovalVO borrowInfoApprovalVO);
 }

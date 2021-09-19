@@ -1,7 +1,9 @@
 package com.eagle.srb.core.mapper;
 
-import com.eagle.srb.core.pojo.entity.BorrowInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.eagle.srb.core.pojo.entity.BorrowInfo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface BorrowInfoMapper extends BaseMapper<BorrowInfo> {
 
+    List<BorrowInfo> selectBorrowInfoList();
 }

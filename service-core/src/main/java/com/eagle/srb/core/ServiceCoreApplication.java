@@ -14,7 +14,7 @@ public class ServiceCoreApplication {
      * http://localhost:8110/swagger-ui.html 打开swagger
      * http://localhost:8110/doc.html 打开swagger token
      * http://localhost:8848/nacos
-     * @param args 0
+     * @param args null
      */
     public static void main(String[] args) {
         SpringApplication.run(ServiceCoreApplication.class, args);
