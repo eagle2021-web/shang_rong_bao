@@ -38,7 +38,8 @@ public class Swagger2Config {
                 .paths(Predicates.and(PathSelectors.regex("/api/.*")))
                 .build();
     }
-    private ApiInfo adminApiInfo(){
+
+    private ApiInfo adminApiInfo() {
         return new ApiInfoBuilder()
                 .title("尚荣宝web API文档")
                 .description("本文档描述了尚荣宝后台管理系统的各个模块的接口的调用方式")
@@ -46,7 +47,8 @@ public class Swagger2Config {
                 .contact(new Contact("eagle", "http://www.chenwangying.cn:8080", "chenwangying16@163.com"))
                 .build();
     }
-    private ApiInfo webApiInfo(){
+
+    private ApiInfo webApiInfo() {
         return new ApiInfoBuilder()
                 .title("尚荣宝后台管理系统API文档")
                 .description("本文档描述了尚荣宝面向用户的系统各个模块的接口的调用方式")

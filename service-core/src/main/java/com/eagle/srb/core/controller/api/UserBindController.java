@@ -41,6 +41,11 @@ public class UserBindController {
         return R.ok().data("formStr", formStr);
     }
 
+    /**
+     * hfb得到表单信息处理后，会发来一个消息，在此接收和处理
+     * @param request hfb的通知请求
+     * @return  根据签名验证结果返回成功或失败字符串，防止伪造的签名
+     */
     @SuppressWarnings("SpringMVCViewInspection")
     @ApiOperation("账户绑定异步回调")
     @PostMapping("/notify")
