@@ -1,7 +1,8 @@
 package com.eagle.srb.core.service;
 
-import com.eagle.srb.core.pojo.entity.TransFlow;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.eagle.srb.core.pojo.bo.TransFlowBO;
+import com.eagle.srb.core.pojo.entity.TransFlow;
 
 /**
  * <p>
@@ -12,5 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-09-02
  */
 public interface TransFlowService extends IService<TransFlow> {
+    void saveTransFlow(TransFlowBO transFlowBO);
 
+    boolean isSaveTransFlow(String agentBillNo);
 }

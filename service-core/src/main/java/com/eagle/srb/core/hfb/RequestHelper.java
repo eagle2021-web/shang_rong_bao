@@ -39,7 +39,7 @@ public class RequestHelper {
             str.append(param.getValue()).append("|");
         }
         str.append(HfbConst.SIGN_KEY);
-        log.info("加密前：" + str.toString());
+        log.info("加密前：" + str);
         String md5Str = MD5.encrypt(str.toString());
         log.info("加密后：" + md5Str);
         return md5Str;

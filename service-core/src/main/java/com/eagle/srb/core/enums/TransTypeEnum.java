@@ -3,11 +3,6 @@ package com.eagle.srb.core.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * @author eagle2020
- */
-
-@SuppressWarnings("AlibabaEnumConstantsMustHaveComment")
 @AllArgsConstructor
 @Getter
 public enum TransTypeEnum {
