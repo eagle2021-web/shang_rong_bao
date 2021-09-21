@@ -1,5 +1,6 @@
 package com.eagle.srb.core.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eagle.srb.core.enums.TransTypeEnum;
 import com.eagle.srb.core.hfb.FormHelper;
@@ -88,5 +89,14 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
         transFlowService.saveTransFlow(transFlowBO);
 
         return "success";
+    }
+
+    @Override
+    public BigDecimal getAccount(Long userId) {
+
+        QueryWrapper<UserAccount> userAccountQueryWrapper = new QueryWrapper<>();
+        userAccountQueryWrapper.eq("user_id", userId);
+        UserAccount userAccount = baseMapper.selectOne(userAccountQueryWrapper);
+        return userAccount.getAmount();
     }
 }

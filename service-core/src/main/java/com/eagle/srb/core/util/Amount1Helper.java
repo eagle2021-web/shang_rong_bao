@@ -23,10 +23,11 @@ public class Amount1Helper {
      */
     public static Map<Integer, BigDecimal> getPerMonthInterest(BigDecimal invest, BigDecimal yearRate, int totalMonth) {
         Map<Integer, BigDecimal> map = new HashMap();
-        //月利息
+        //月利率
         double monthRate = yearRate.divide(new BigDecimal("12"), 8, BigDecimal.ROUND_DOWN).doubleValue();
         BigDecimal monthInterest;
         for (int i = 1; i < totalMonth + 1; i++) {
+            //每月还利息
             BigDecimal multiply = invest.multiply(new BigDecimal(monthRate));
             BigDecimal sub  = new BigDecimal(Math.pow(1 + monthRate, totalMonth)).subtract(new BigDecimal(Math.pow(1 + monthRate, i-1)));
             monthInterest = multiply.multiply(sub).divide(new BigDecimal(Math.pow(1 + monthRate, totalMonth) - 1), 8, BigDecimal.ROUND_DOWN);

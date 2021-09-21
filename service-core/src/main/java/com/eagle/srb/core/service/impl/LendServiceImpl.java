@@ -3,6 +3,7 @@ package com.eagle.srb.core.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eagle.srb.core.enums.LendStatusEnum;
+import com.eagle.srb.core.enums.ReturnMethodEnum;
 import com.eagle.srb.core.mapper.BorrowerMapper;
 import com.eagle.srb.core.mapper.LendMapper;
 import com.eagle.srb.core.pojo.entity.BorrowInfo;
@@ -13,7 +14,7 @@ import com.eagle.srb.core.pojo.vo.BorrowerDetailVO;
 import com.eagle.srb.core.service.BorrowerService;
 import com.eagle.srb.core.service.DictService;
 import com.eagle.srb.core.service.LendService;
-import com.eagle.srb.core.util.LendNoUtils;
+import com.eagle.srb.core.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -128,6 +129,21 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
         result.put("lend", lend);
         result.put("borrower", borrowerDetailVO);
         return result;
+    }
+
+    @Override
+    public BigDecimal getInterestCount(BigDecimal invest, BigDecimal yearRate, Integer totalmonth, Integer returnMethod) {
+        BigDecimal interestCount;
+        if(returnMethod.intValue() == ReturnMethodEnum.ONE.getMethod()){
+            interestCount = Amount1Helper.getInterestCount(invest, yearRate, totalmonth);
+        }else if(returnMethod.intValue() == ReturnMethodEnum.TWO.getMethod()){
+            interestCount = Amount2Helper.getInterestCount(invest, yearRate, totalmonth);
+        }else if(returnMethod.intValue() == ReturnMethodEnum.THREE.getMethod()){
+            interestCount = Amount3Helper.getInterestCount(invest, yearRate, totalmonth);
+        }else{
+            interestCount = Amount4Helper.getInterestCount(invest, yearRate, totalmonth);
+        }
+        return interestCount;
     }
 
 
