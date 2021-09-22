@@ -2,7 +2,7 @@ package com.eagle.srb.core.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Random;
+import java.util.UUID;
 
 public class LendNoUtils {
 
@@ -11,14 +11,14 @@ public class LendNoUtils {
         LocalDateTime time = LocalDateTime.now();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String strDate = dtf.format(time);
+//        strDate = UUID.randomUUID().toString();
+//        StringBuilder result = new StringBuilder();
+//        Random random = new Random();
+//        for (int i = 0; i < 3; i++) {
+//            result.append(random.nextInt(10));
+//        }
 
-        StringBuilder result = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 3; i++) {
-            result.append(random.nextInt(10));
-        }
-
-        return strDate + result;
+        return strDate + UUID.randomUUID().toString().substring(0,10);
     }
 
     public static String getLendNo() {
