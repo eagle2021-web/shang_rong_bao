@@ -2,6 +2,8 @@ package com.eagle.srb.core.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.eagle.common.exception.Assert;
+import com.eagle.common.result.ResponseEnum;
 import com.eagle.srb.core.enums.TransTypeEnum;
 import com.eagle.srb.core.hfb.FormHelper;
 import com.eagle.srb.core.hfb.HfbConst;
@@ -13,7 +15,9 @@ import com.eagle.srb.core.pojo.entity.UserAccount;
 import com.eagle.srb.core.pojo.entity.UserInfo;
 import com.eagle.srb.core.service.TransFlowService;
 import com.eagle.srb.core.service.UserAccountService;
+import com.eagle.srb.core.service.UserBindService;
 import com.eagle.srb.core.util.LendNoUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,12 +35,17 @@ import java.util.Map;
  * @since 2021-09-02
  */
 @Service
+@Slf4j
 public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserAccount> implements UserAccountService {
 
     @Resource
     private UserInfoMapper userInfoMapper;
     @Resource
     private TransFlowService transFlowService;
+    @Resource
+    private UserAccountService userAccountService;
+    @Resource
+    private UserBindService userBindService;
 
     @Override
     public String commitCharge(BigDecimal chargeAmt, Long userId) {
@@ -64,18 +73,18 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
     public String notify(Map<String, Object> paramMap) {
 
 
-        String agentBillNo = (String)paramMap.get("agentBillNo");
+        String agentBillNo = (String) paramMap.get("agentBillNo");
 
         //幂等性判断？标准 =  //判断交易流水是否存在
         boolean isSave = transFlowService.isSaveTransFlow(agentBillNo);
-        if(isSave){
+        if (isSave) {
             log.warn("幂等性返回");
             return "success";
         }
 
         //账户处理
-        String bindCode = (String)paramMap.get("bindCode");
-        String chargeAmt = (String)paramMap.get("chargeAmt");
+        String bindCode = (String) paramMap.get("bindCode");
+        String chargeAmt = (String) paramMap.get("chargeAmt");
         baseMapper.updateAccount(bindCode, new BigDecimal(chargeAmt), new BigDecimal(0));
 
         //记录账户流水
@@ -98,5 +107,63 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
         userAccountQueryWrapper.eq("user_id", userId);
         UserAccount userAccount = baseMapper.selectOne(userAccountQueryWrapper);
         return userAccount.getAmount();
+    }
+
+    /**
+     * 提现确认
+     * @param fetchAmt 金额
+     * @param userId 用户id
+     * @return 返回表单
+     */
+    @Override
+    public String commitWithdraw(BigDecimal fetchAmt, Long userId) {
+        //用户账户余额
+        BigDecimal amount = userAccountService.getAccount(userId);
+        Assert.isTrue(amount.doubleValue() >= fetchAmt.doubleValue(),
+                ResponseEnum.NOT_SUFFICIENT_FUNDS_ERROR);
+
+        String bindCode = userBindService.getBindCodeByUserId(userId);
+
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("agentId", HfbConst.AGENT_ID);
+        paramMap.put("agentBillNo", LendNoUtils.getWithdrawNo());
+        paramMap.put("bindCode", bindCode);
+        paramMap.put("fetchAmt", fetchAmt);
+        paramMap.put("feeAmt", new BigDecimal(0));
+        paramMap.put("notifyUrl", HfbConst.WITHDRAW_NOTIFY_URL);
+        paramMap.put("returnUrl", HfbConst.WITHDRAW_RETURN_URL);
+        paramMap.put("timestamp", RequestHelper.getTimestamp());
+        String sign = RequestHelper.getSign(paramMap);
+        paramMap.put("sign", sign);
+
+        //构建自动提交表单
+        return FormHelper.buildForm(HfbConst.WITHDRAW_URL, paramMap);
+    }
+
+    @Override
+    public void notifyWithdraw(Map<String, Object> paramMap) {
+
+        //幂等判断
+        log.info("提现成功");
+        String agentBillNo = (String)paramMap.get("agentBillNo");
+        boolean result = transFlowService.isSaveTransFlow(agentBillNo);
+        if(result){
+            log.warn("幂等性返回");
+            return;
+        }
+
+        //账户同步
+        String bindCode = (String)paramMap.get("bindCode");
+        String fetchAmt = (String)paramMap.get("fetchAmt");
+        baseMapper.updateAccount(bindCode, new BigDecimal("-" + fetchAmt), new BigDecimal(0));
+
+        //交易流水
+        TransFlowBO transFlowBO = new TransFlowBO(
+                agentBillNo,
+                bindCode,
+                new BigDecimal(fetchAmt),
+                TransTypeEnum.WITHDRAW,
+                "提现啦");
+        transFlowService.saveTransFlow(transFlowBO);
     }
 }
