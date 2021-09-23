@@ -31,7 +31,6 @@ import java.util.Map;
 @RequestMapping("/api/core/lendReturn")
 @Slf4j
 public class LendReturnController {
-
     @Resource
     private LendReturnService lendReturnService;
 
@@ -59,13 +58,11 @@ public class LendReturnController {
     @ApiOperation("还款异步回调")
     @PostMapping("/notifyUrl")
     public String notifyUrl(HttpServletRequest request) {
-
         Map<String, Object> paramMap = RequestHelper.switchMap(request.getParameterMap());
         log.info("还款异步回调：" + JSON.toJSONString(paramMap));
-
         //校验签名
-        if(RequestHelper.isSignEquals(paramMap)) {
-            if("0001".equals(paramMap.get("resultCode"))) {
+        if (RequestHelper.isSignEquals(paramMap)) {
+            if ("0001".equals(paramMap.get("resultCode"))) {
                 lendReturnService.notify(paramMap);
             } else {
                 log.info("还款异步回调失败：" + JSON.toJSONString(paramMap));
