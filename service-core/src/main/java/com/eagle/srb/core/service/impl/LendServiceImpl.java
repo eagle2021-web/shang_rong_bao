@@ -74,7 +74,6 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
 
     /**
      * 创建新的标的
-     *
      * @param borrowInfoApprovalVO 审批信息
      * @param borrowInfo           借款信息
      */
@@ -128,7 +127,6 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
 
     /**
      * 查看标的列表
-     *
      * @return
      */
     @Override
@@ -145,9 +143,8 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
 
     /**
      * 查看标的详情
-     *
-     * @param id
-     * @return
+     * @param id 标的id
+     * @return 标的信息和借款人信息
      */
     @Override
     public Map<String, Object> getLendDetail(Long id) {
@@ -174,31 +171,29 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
 
     /**
      * 计算当次投资收益
-     *
-     * @param invest
-     * @param yearRate
-     * @param totalmonth
-     * @param returnMethod
-     * @return
+     * @param invest 投资额
+     * @param yearRate 年利率
+     * @param totalMonth 投资多少个月
+     * @param returnMethod 回款方式
+     * @return 投资收益
      */
     @Override
-    public BigDecimal getInterestCount(BigDecimal invest, BigDecimal yearRate, Integer totalmonth, Integer returnMethod) {
+    public BigDecimal getInterestCount(BigDecimal invest, BigDecimal yearRate, Integer totalMonth, Integer returnMethod) {
         BigDecimal interestCount;
         if (returnMethod.intValue() == ReturnMethodEnum.ONE.getMethod()) {
-            interestCount = Amount1Helper.getInterestCount(invest, yearRate, totalmonth);
+            interestCount = Amount1Helper.getInterestCount(invest, yearRate, totalMonth);
         } else if (returnMethod.intValue() == ReturnMethodEnum.TWO.getMethod()) {
-            interestCount = Amount2Helper.getInterestCount(invest, yearRate, totalmonth);
+            interestCount = Amount2Helper.getInterestCount(invest, yearRate, totalMonth);
         } else if (returnMethod.intValue() == ReturnMethodEnum.THREE.getMethod()) {
-            interestCount = Amount3Helper.getInterestCount(invest, yearRate, totalmonth);
+            interestCount = Amount3Helper.getInterestCount(invest, yearRate, totalMonth);
         } else {
-            interestCount = Amount4Helper.getInterestCount(invest, yearRate, totalmonth);
+            interestCount = Amount4Helper.getInterestCount(invest, yearRate, totalMonth);
         }
         return interestCount;
     }
 
     /**
      * 放款
-     *
      * @param lendId 标的id
      */
 
@@ -330,7 +325,6 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
         //生成期数和还款记录的id对应的键值对集合
         System.out.println(1111);
         Map<Integer, Long> lendReturnMap = lendReturnList.stream().collect(
-
                 Collectors.toMap(LendReturn::getCurrentPeriod, LendReturn::getId) //期数和returnId,hash表
         );
         log.info("保存后=");
@@ -353,7 +347,6 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
 
         //遍历还款记录列表
         for (LendReturn lendReturn : lendReturnList) {
-
             //通过filter、map、reduce将相关期数的回款数据过滤出来
             //将当前期数的所有投资人的数据相加，就是当前期数的所有投资人的回款数据（本金、利息、总金额）
             //LendReturnId 是指借款人某期还款id ----  item 是某投资人某期回款记录
@@ -371,8 +364,6 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
                     .filter(item -> item.getLendReturnId().longValue() == lendReturn.getId().longValue())
                     .map(LendItemReturn::getTotal)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-
             //将计算出的数据填充入还款计划记录：设置本金、利息、总金额
             lendReturn.setPrincipal(sumPrincipal);//本金
             lendReturn.setInterest(sumInterest);//利息

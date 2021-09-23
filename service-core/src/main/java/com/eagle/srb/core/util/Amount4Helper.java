@@ -20,7 +20,10 @@ public class Amount4Helper {
         Map<Integer, BigDecimal> map = new HashMap<>();
         BigDecimal monthInterest = yearRate.divide(new BigDecimal("12"), 8, BigDecimal.ROUND_HALF_UP);
         BigDecimal multiply = amount.multiply(monthInterest).multiply(new BigDecimal(totalmonth));
-        map.put(1, multiply);
+        for (int i = 1; i < totalmonth; i++) {
+            map.put(i, new BigDecimal(0));
+        }
+        map.put(totalmonth, multiply);
         return map;
     }
 
@@ -33,7 +36,10 @@ public class Amount4Helper {
      */
     public static Map<Integer, BigDecimal> getPerMonthPrincipal(BigDecimal amount, BigDecimal yearRate, int totalmonth) {
         Map<Integer, BigDecimal> map = new HashMap<>();
-        map.put(1, amount);
+        for (int i = 1; i < totalmonth; i++) {
+            map.put(i, new BigDecimal(0));
+        }
+        map.put(totalmonth, amount);
         return map;
     }
 
@@ -59,7 +65,7 @@ public class Amount4Helper {
         Map getPerMonthPrincipalInterest = getPerMonthPrincipal(invest, yearRate, month);
         System.out.println("一次还本还息---偿还本金：" + getPerMonthPrincipalInterest);
         Map mapInterest = getPerMonthInterest(invest, yearRate, month);
-        System.out.println("一次还本还息---总利息：" + mapInterest);
+        System.out.println("一次还本还息---每月利息：" + mapInterest);
         BigDecimal count = getInterestCount(invest, yearRate, month);
         System.out.println("一次还本还息---总利息：" + count);
     }
