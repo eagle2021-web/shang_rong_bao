@@ -8,6 +8,7 @@ import com.eagle.srb.core.pojo.entity.UserInfo;
 import com.eagle.srb.core.pojo.query.UserInfoQuery;
 import com.eagle.srb.core.pojo.vo.LoginVO;
 import com.eagle.srb.core.pojo.vo.RegisterVO;
+import com.eagle.srb.core.pojo.vo.UserIndexVO;
 import com.eagle.srb.core.pojo.vo.UserInfoVO;
 
 /**
@@ -31,4 +32,6 @@ public interface UserInfoService extends IService<UserInfo> {
 
 
     R checkMobile(String mobile);
+
+    UserIndexVO getIndexUserInfo(Long userId);
 }

@@ -8,6 +8,7 @@ import com.eagle.common.util.RegexValidateUtils;
 import com.eagle.srb.base.util.JwtUtils;
 import com.eagle.srb.core.pojo.vo.LoginVO;
 import com.eagle.srb.core.pojo.vo.RegisterVO;
+import com.eagle.srb.core.pojo.vo.UserIndexVO;
 import com.eagle.srb.core.pojo.vo.UserInfoVO;
 import com.eagle.srb.core.service.UserInfoService;
 import io.swagger.annotations.Api;
@@ -90,6 +91,15 @@ public class UserInfoController {
     @GetMapping("/checkMobile/{mobile}")
     public R checkMobile(@PathVariable String mobile) {
         return userInfoService.checkMobile(mobile);
+    }
+
+    @ApiOperation("获取个人空间用户信息")
+    @GetMapping("/auth/getIndexUserInfo")
+    public R getIndexUserInfo(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        Long userId = JwtUtils.getUserId(token);
+        UserIndexVO userIndexVO = userInfoService.getIndexUserInfo(userId);
+        return R.ok().data("userIndexVO", userIndexVO);
     }
 }
 
