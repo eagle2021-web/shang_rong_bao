@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-#    active: dev # 环境设置
+    active: dev # 环境设置
   application:
     name: service-core # 服务名
   datasource: # mysql数据库连接
@@ -27,9 +27,17 @@ spring:
   cloud:
     nacos:
       server-addr: localhost:8848
+  #spring:
+  rabbitmq:
+    host: redis_local #MQ地址
+    port: 5672
+    virtual-host: /eaglehost #虚拟机名称
+    username: eagle
+    password: a3592540124A!670!
+
 mybatis-plus: #mybatis
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:com/eagle/srb/core/mapper/xml/*.xml
 ## 设置日志级别 在logback文件专门配置
 #logging:

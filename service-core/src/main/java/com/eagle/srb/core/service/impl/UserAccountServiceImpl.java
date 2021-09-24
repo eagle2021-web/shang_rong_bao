@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eagle.common.exception.Assert;
 import com.eagle.common.result.ResponseEnum;
+import com.eagle.srb.base.dto.SmsDTO;
 import com.eagle.srb.core.enums.TransTypeEnum;
 import com.eagle.srb.core.hfb.FormHelper;
 import com.eagle.srb.core.hfb.HfbConst;
@@ -16,7 +17,10 @@ import com.eagle.srb.core.pojo.entity.UserInfo;
 import com.eagle.srb.core.service.TransFlowService;
 import com.eagle.srb.core.service.UserAccountService;
 import com.eagle.srb.core.service.UserBindService;
+import com.eagle.srb.core.service.UserInfoService;
 import com.eagle.srb.core.util.LendNoUtils;
+import com.eagle.srb.rabbitutil.constant.MQConst;
+import com.eagle.srb.rabbitutil.service.MQService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +50,17 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
     private UserAccountService userAccountService;
     @Resource
     private UserBindService userBindService;
+    @Resource
+    private UserInfoService userInfoService;
+    @Resource
+    private MQService mqService;
 
+    /**
+     * 确认充值，向hfb提交表单
+     * @param chargeAmt 充值金额
+     * @param userId 用户id
+     * @return 表单
+     */
     @Override
     public String commitCharge(BigDecimal chargeAmt, Long userId) {
         //获取充值人绑定协议号
@@ -61,13 +75,18 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
         paramMap.put("feeAmt", new BigDecimal("0"));//冻结金额
         paramMap.put("notifyUrl", HfbConst.RECHARGE_NOTIFY_URL);//同步通知url
         paramMap.put("returnUrl", HfbConst.RECHARGE_RETURN_URL);//返回地址url
-        paramMap.put("timestamp", RequestHelper.getTimestamp());//
-        paramMap.put("sign", RequestHelper.getSign(paramMap));
-
+        paramMap.put("timestamp", RequestHelper.getTimestamp());//时间戳
+        paramMap.put("sign", RequestHelper.getSign(paramMap));//签名
 
         return FormHelper.buildForm(HfbConst.RECHARGE_URL, paramMap);
     }
 
+    /**
+     * 处理充值通知
+     *
+     * @param paramMap 参数列表
+     * @return 处理结果
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public String notify(Map<String, Object> paramMap) {
@@ -97,6 +116,16 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
 
         transFlowService.saveTransFlow(transFlowBO);
 
+        //发消息
+        String mobile = userInfoService.getMobileByBindCode(bindCode);
+        SmsDTO smsDTO = new SmsDTO();
+        smsDTO.setMobile(mobile);
+        smsDTO.setMessage("充值成功");
+        mqService.sendMessage(
+                MQConst.EXCHANGE_TOPIC_SMS,//交换机
+                MQConst.ROUTING_SMS_ITEM,//路由
+                smsDTO
+        );
         return "success";
     }
 
@@ -111,8 +140,9 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
 
     /**
      * 提现确认
+     *
      * @param fetchAmt 金额
-     * @param userId 用户id
+     * @param userId   用户id
      * @return 返回表单
      */
     @Override
@@ -145,16 +175,16 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
 
         //幂等判断
         log.info("提现成功");
-        String agentBillNo = (String)paramMap.get("agentBillNo");
+        String agentBillNo = (String) paramMap.get("agentBillNo");
         boolean result = transFlowService.isSaveTransFlow(agentBillNo);
-        if(result){
+        if (result) {
             log.warn("幂等性返回");
             return;
         }
 
         //账户同步
-        String bindCode = (String)paramMap.get("bindCode");
-        String fetchAmt = (String)paramMap.get("fetchAmt");
+        String bindCode = (String) paramMap.get("bindCode");
+        String fetchAmt = (String) paramMap.get("fetchAmt");
         baseMapper.updateAccount(bindCode, new BigDecimal("-" + fetchAmt), new BigDecimal(0));
 
         //交易流水

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 /**
  * @author eagle2020
  */
+//(exclude = DataSourceAutoConfiguration.class)
 @SpringBootApplication
 @ComponentScan({"com.eagle"})
 public class ServiceCoreApplication {

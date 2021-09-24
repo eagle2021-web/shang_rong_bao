@@ -34,4 +34,6 @@ public interface UserInfoService extends IService<UserInfo> {
     R checkMobile(String mobile);
 
     UserIndexVO getIndexUserInfo(Long userId);
+
+    String getMobileByBindCode(String bindCode);
 }

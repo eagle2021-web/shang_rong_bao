@@ -23,6 +23,13 @@ spring:
   cloud:
     nacos:
       server-addr: localhost:8848
+  #spring:
+  rabbitmq:
+    host: redis_local #MQ地址
+    port: 5672
+    virtual-host: /eaglehost #虚拟机名称
+    username: eagle
+    password: a3592540124A!670!
 #阿里云短信
 #aliyun:
 #  sms:

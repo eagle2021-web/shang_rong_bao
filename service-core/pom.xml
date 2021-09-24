@@ -12,12 +12,12 @@
     <artifactId>service-core</artifactId>
 
     <dependencies>
-        <!--        <dependency>-->
-        <!--            <groupId>com.eagle</groupId>-->
-        <!--            <artifactId>eagle-common</artifactId>-->
-        <!--            <version>0.0.1-SNAPSHOT</version>-->
-        <!--        </dependency>-->
-
+        <!--rabbitmq消息队列-->
+        <dependency>
+            <groupId>com.eagle</groupId>
+            <artifactId>rabbit-mq</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
