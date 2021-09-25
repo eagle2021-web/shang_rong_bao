@@ -1,6 +1,8 @@
 package com.eagle.srb.core.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eagle.srb.core.mapper.LendItemMapper;
 import com.eagle.srb.core.mapper.LendItemReturnMapper;
@@ -101,4 +103,13 @@ public class LendItemReturnServiceImpl extends ServiceImpl<LendItemReturnMapper,
         lendItemReturnQueryWrapper.eq("lend_return_id", lendReturnId);
         return baseMapper.selectList(lendItemReturnQueryWrapper);
     }
+
+    @Override
+    public IPage<LendItemReturn> selfListPage(Page<LendItemReturn> lendItemPage, Long userId) {
+        QueryWrapper<LendItemReturn> lendItemReturnQueryWrapper = new QueryWrapper<>();
+        lendItemReturnQueryWrapper.eq("invest_user_id", userId);
+        return baseMapper.selectPage(lendItemPage, lendItemReturnQueryWrapper);
+    }
+
+
 }

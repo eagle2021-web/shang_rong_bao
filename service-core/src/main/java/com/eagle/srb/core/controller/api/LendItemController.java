@@ -87,7 +87,7 @@ public class LendItemController {
         return R.ok().data("list", list);
     }
 
-    @ApiOperation("还款列表-分页")
+    @ApiOperation("投资列表-分页")
     @GetMapping("/invest/list/{page}/{limit}")
     public R repaymentlistPage(
             @ApiParam(value = "当前页码", required = true)

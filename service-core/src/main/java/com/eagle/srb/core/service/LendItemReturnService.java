@@ -1,7 +1,9 @@
 package com.eagle.srb.core.service;
 
-import com.eagle.srb.core.pojo.entity.LendItemReturn;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.eagle.srb.core.pojo.entity.LendItemReturn;
 
 import java.util.List;
 import java.util.Map;
@@ -21,4 +23,7 @@ public interface LendItemReturnService extends IService<LendItemReturn> {
     List<Map<String, Object>> addReturnDetail(Long lendReturnId);
 
     List<LendItemReturn> selectLendItemReturnList(Long lendReturnId);
+
+
+    IPage<LendItemReturn> selfListPage(Page<LendItemReturn> lendItemPage, Long userId);
 }

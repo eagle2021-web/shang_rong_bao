@@ -1,6 +1,8 @@
 package com.eagle.srb.core.controller.api;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eagle.common.result.R;
 import com.eagle.srb.base.util.JwtUtils;
 import com.eagle.srb.core.pojo.entity.LendItemReturn;
@@ -47,6 +49,31 @@ public class LendItemReturnController {
         List<LendItemReturn> list = lendItemReturnService.selectByLendId(lendId, userId);
         log.info("list = {}", list);
         return R.ok().data("list", list);
+    }
+
+    /**
+     * 投资人查看自己的回款列表
+     * @param page 当前页码
+     * @param limit 每页条数
+     * @param request 请求
+     * @return 回款列表分页
+     */
+    @ApiOperation("回款列表-分页")
+    @GetMapping("/investor/list/{page}/{limit}")
+    public R repaymentlistPage(
+            @ApiParam(value = "当前页码", required = true)
+            @PathVariable Long page,
+            @ApiParam(value = "每页记录数", required = true)
+            @PathVariable Long limit,
+            HttpServletRequest request
+    ) {
+        //token
+        String token = request.getHeader("token");
+        Long userId = JwtUtils.getUserId(token);
+        Page<LendItemReturn> lendItemPage = new Page<>(page, limit);
+        IPage<LendItemReturn> pageModel = lendItemReturnService.selfListPage(lendItemPage, userId);
+
+        return R.ok().data("pageModel", pageModel);
     }
 }
 
