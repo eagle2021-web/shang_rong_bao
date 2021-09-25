@@ -2,6 +2,8 @@ package com.eagle.srb.core.controller.api;
 
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eagle.common.result.R;
 import com.eagle.srb.base.util.JwtUtils;
 import com.eagle.srb.core.hfb.RequestHelper;
@@ -84,4 +86,23 @@ public class LendItemController {
         List<LendItem> list = lendItemService.selectByLendId(lendId);
         return R.ok().data("list", list);
     }
+
+    @ApiOperation("还款列表-分页")
+    @GetMapping("/invest/list/{page}/{limit}")
+    public R repaymentlistPage(
+            @ApiParam(value = "当前页码", required = true)
+            @PathVariable Long page,
+            @ApiParam(value = "每页记录数", required = true)
+            @PathVariable Long limit,
+            HttpServletRequest request
+    ) {
+        //token
+        String token = request.getHeader("token");
+        Long userId = JwtUtils.getUserId(token);
+        Page<LendItem> lendItemPage = new Page<>(page, limit);
+        IPage<LendItem> pageModel = lendItemService.listPage(lendItemPage, userId);
+
+        return R.ok().data("pageModel", pageModel);
+    }
+
 }

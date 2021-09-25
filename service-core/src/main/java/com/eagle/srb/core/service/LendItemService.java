@@ -1,5 +1,7 @@
 package com.eagle.srb.core.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eagle.srb.core.pojo.entity.LendItem;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.eagle.srb.core.pojo.vo.InvestVO;
@@ -24,4 +26,6 @@ public interface LendItemService extends IService<LendItem> {
     List<LendItem> selectByLendId(Long lendId, Integer status);
 
     List<LendItem> selectByLendId(Long lendId);
+
+    IPage<LendItem> listPage(Page<LendItem> lendItemPage, Long userId);
 }

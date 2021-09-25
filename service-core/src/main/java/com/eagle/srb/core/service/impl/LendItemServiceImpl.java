@@ -1,6 +1,8 @@
 package com.eagle.srb.core.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eagle.common.exception.Assert;
 import com.eagle.common.result.ResponseEnum;
@@ -59,6 +61,7 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
 
     /**
      * 提交投资申请
+     *
      * @param investVO 投资对象
      * @return html字符串，包含自动提交表单
      */
@@ -125,7 +128,7 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("agentId", HfbConst.AGENT_ID);
         paramMap.put("voteBindCode", bindCode);
-        paramMap.put("benefitBindCode",benefitBindCode);
+        paramMap.put("benefitBindCode", benefitBindCode);
         paramMap.put("agentProjectCode", lend.getLendNo());//项目标号
         paramMap.put("agentProjectName", lend.getTitle());//项目标题
 
@@ -150,6 +153,7 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
 
     /**
      * 处理hfb关于投资申请的处理通知
+     *
      * @param paramMap 参数集合
      */
     @Transactional(rollbackFor = Exception.class)
@@ -157,16 +161,16 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
     public void notify(Map<String, Object> paramMap) {
 
         //幂等性返回
-        String agentBillNo = (String)paramMap.get("agentBillNo");
+        String agentBillNo = (String) paramMap.get("agentBillNo");
         boolean result = transFlowService.isSaveTransFlow(agentBillNo);
-        if(result){
+        if (result) {
             log.warn("幂等性返回");
             return;
         }
 
         //修改账户金额：从余额中减去投资金额，在冻结金额中增加投资进入
-        String voteBindCode = (String)paramMap.get("voteBindCode");
-        String voteAmt = (String)paramMap.get("voteAmt");
+        String voteBindCode = (String) paramMap.get("voteBindCode");
+        String voteAmt = (String) paramMap.get("voteAmt");
 
         userAccountMapper.updateAccount(
                 voteBindCode,
@@ -198,6 +202,7 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
 
     /**
      * 根据标的id查询相关投资人列表
+     *
      * @param lendId 标的id
      * @param status 投资状态
      * @return 投资人列表
@@ -213,6 +218,7 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
 
     /**
      * 根据标的id获得投资人列表
+     *
      * @param lendId 标的id
      * @return 投资人列表
      */
@@ -224,11 +230,27 @@ public class LendItemServiceImpl extends ServiceImpl<LendItemMapper, LendItem> i
     }
 
     /**
+     * 投资人查看自己的投资列表
+     *
+     * @param lendItemPage 分页参数
+     * @param userId       用户id
+     * @return 投资列表
+     */
+    @Override
+    public IPage<LendItem> listPage(Page<LendItem> lendItemPage, Long userId) {
+        QueryWrapper<LendItem> lendItemQueryWrapper = new QueryWrapper<LendItem>() {{
+            eq("invest_user_id", userId);
+        }};
+        return baseMapper.selectPage(lendItemPage, lendItemQueryWrapper);
+    }
+
+    /**
      * 根据流水号获取投资记录
+     *
      * @param lendItemNo 流水号
      * @return LendItem记录
      */
-    private LendItem getByLenItemNo(String lendItemNo){
+    private LendItem getByLenItemNo(String lendItemNo) {
         QueryWrapper<LendItem> lendItemQueryWrapper = new QueryWrapper<>();
         lendItemQueryWrapper.eq("lend_item_no", lendItemNo);
         return baseMapper.selectOne(lendItemQueryWrapper);
