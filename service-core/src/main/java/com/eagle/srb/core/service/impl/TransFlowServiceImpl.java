@@ -1,13 +1,15 @@
 package com.eagle.srb.core.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eagle.srb.core.mapper.TransFlowMapper;
 import com.eagle.srb.core.mapper.UserInfoMapper;
 import com.eagle.srb.core.pojo.bo.TransFlowBO;
 import com.eagle.srb.core.pojo.entity.TransFlow;
 import com.eagle.srb.core.pojo.entity.UserInfo;
 import com.eagle.srb.core.service.TransFlowService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -58,4 +60,12 @@ public class TransFlowServiceImpl extends ServiceImpl<TransFlowMapper, TransFlow
         transFlowQueryWrapper.eq("user_id", userId).orderByDesc("id");
         return baseMapper.selectList(transFlowQueryWrapper);
     }
+
+    @Override
+    public IPage<TransFlow> listPage(Page<TransFlow> pageParam, Long userId) {
+        QueryWrapper<TransFlow> transFlowQueryWrapper = new QueryWrapper<>();
+        transFlowQueryWrapper.eq("user_id", userId).orderByDesc("id");
+        return baseMapper.selectPage(pageParam, transFlowQueryWrapper);
+    }
+
 }

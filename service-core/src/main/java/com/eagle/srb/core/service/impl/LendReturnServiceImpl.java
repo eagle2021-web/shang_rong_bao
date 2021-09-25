@@ -2,6 +2,8 @@ package com.eagle.srb.core.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eagle.common.exception.Assert;
 import com.eagle.common.result.ResponseEnum;
@@ -192,5 +194,12 @@ public class LendReturnServiceImpl extends ServiceImpl<LendReturnMapper, LendRet
                     "还款到账，项目编号：" + lend.getLendNo() + "，项目名称：" + lend.getTitle());
             transFlowService.saveTransFlow(investTransFlowBO);
         });
+    }
+
+    @Override
+    public IPage<LendReturn> listPage(Page<LendReturn> pageParam, Long lendId) {
+        QueryWrapper<LendReturn> lendReturnQueryWrapper = new QueryWrapper<>();
+        lendReturnQueryWrapper.eq("lend_id", lendId).orderByDesc("id");
+        return baseMapper.selectPage(pageParam, lendReturnQueryWrapper);
     }
 }

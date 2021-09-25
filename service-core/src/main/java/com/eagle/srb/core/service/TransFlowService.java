@@ -1,8 +1,10 @@
 package com.eagle.srb.core.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.eagle.srb.core.pojo.bo.TransFlowBO;
 import com.eagle.srb.core.pojo.entity.TransFlow;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
@@ -21,4 +23,6 @@ public interface TransFlowService extends IService<TransFlow> {
     boolean isSaveTransFlow(String agentBillNo);
 
     List<TransFlow> selectByUserId(Long userId);
+
+    IPage<TransFlow> listPage(Page<TransFlow> pageParam, Long userId);
 }

@@ -87,6 +87,8 @@
         </dependency>
     </dependencies>
     <build>
+        <!--                java '-Dfile.encoding=utf-8' -jar -->
+        <!--                java -Dfile.encoding=utf-8 -jar -->
         <!--        项目打包时会将Java目录中的*.xml文件也进行打包-->
         <resources>
             <resource>
@@ -96,6 +98,20 @@
                 </includes>
                 <filtering>false</filtering>
             </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>*.yaml</include>
+                    <include>*.xml</include>
+                    <include>*.yml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
         </resources>
     </build>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+    </properties>
 </project>

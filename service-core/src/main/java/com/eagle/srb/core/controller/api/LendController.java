@@ -1,8 +1,15 @@
 package com.eagle.srb.core.controller.api;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eagle.common.result.R;
+import com.eagle.srb.base.util.JwtUtils;
+import com.eagle.srb.core.enums.LendStatusEnum;
 import com.eagle.srb.core.pojo.entity.Lend;
+import com.eagle.srb.core.pojo.entity.LendReturn;
+import com.eagle.srb.core.service.LendReturnService;
 import com.eagle.srb.core.service.LendService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +42,9 @@ public class LendController {
 
     @Resource
     private LendService lendService;
+
+    @Resource
+    private LendReturnService lendReturnService;
 
     @ApiOperation("获取标的列表")
     @GetMapping("/list")
@@ -68,5 +79,55 @@ public class LendController {
 
         BigDecimal  interestCount = lendService.getInterestCount(invest, yearRate, totalmonth, returnMethod);
         return R.ok().data("interestCount", interestCount);
+    }
+
+    @ApiOperation("借款列表")
+    @GetMapping("/borrow/list")
+    public R selectBorrowRecordByUserId(HttpServletRequest request) {
+        String token = request.getHeader("token");
+        Long userId = JwtUtils.getUserId(token);
+        List<Lend> lends = lendService.selectBorrowRecordByUserId(userId);
+        return R.ok().data("lends", lends);
+    }
+
+    @ApiOperation("借款列表-分页")
+    @GetMapping("/borrow/list/{page}/{limit}")
+    public R listPage(
+            @ApiParam(value = "当前页码", required = true)
+            @PathVariable Long page,
+            @ApiParam(value = "每页记录数", required = true)
+            @PathVariable Long limit,
+            HttpServletRequest request
+    ) {
+        String token = request.getHeader("token");
+        Long userId = JwtUtils.getUserId(token);
+        Page<Lend> pageParam = new Page<>(page, limit);
+        IPage<Lend> pageModel = lendService.listPage(pageParam, userId);
+        return R.ok().data("pageModel", pageModel);
+    }
+
+    @ApiOperation("还款列表-分页")
+    @GetMapping("/repayment/list/{page}/{limit}")
+    public R repaymentlistPage(
+            @ApiParam(value = "当前页码", required = true)
+            @PathVariable Long page,
+            @ApiParam(value = "每页记录数", required = true)
+            @PathVariable Long limit,
+            HttpServletRequest request
+    ) {
+        //token
+        String token = request.getHeader("token");
+        Long userId = JwtUtils.getUserId(token);
+        //查lend表正在还款的记录,一个用户只能有一个正在还款的lend记录
+        QueryWrapper<Lend> lendQueryWrapper = new QueryWrapper<>();
+        lendQueryWrapper.eq("user_id", userId)
+                .eq("status", LendStatusEnum.PAY_RUN.getStatus());
+        Lend one = lendService.getOne(lendQueryWrapper);
+        //查lendReturn表具体还款计划（分期）
+        Long lendId = one != null ? one.getId() : 0;//lend id,没有则做一次无用查询
+        Page<LendReturn> pageParam = new Page<>(page, limit);
+        IPage<LendReturn> pageModel = lendReturnService.listPage(pageParam, lendId);
+        log.info("pageModel = {}", pageModel.getRecords());
+        return R.ok().data("pageModel", pageModel);
     }
 }

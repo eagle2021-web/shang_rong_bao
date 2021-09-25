@@ -2,6 +2,8 @@ package com.eagle.srb.core.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eagle.common.exception.BusinessException;
 import com.eagle.srb.core.enums.LendStatusEnum;
@@ -476,5 +478,24 @@ public class LendServiceImpl extends ServiceImpl<LendMapper, Lend> implements Le
         lendItemReturnService.saveBatch(lendItemReturnList);
 
         return lendItemReturnList;
+    }
+
+    /**
+     * 返回某个用户的借款记录
+     * @param userId 用户id
+     * @return 借款记录也就是标的记录
+     */
+    @Override
+    public List<Lend> selectBorrowRecordByUserId(Long userId) {
+        QueryWrapper<Lend> lendWrapper = new QueryWrapper<>();
+        lendWrapper.eq("user_id", userId).orderByDesc("id");
+        return baseMapper.selectList(lendWrapper);
+    }
+
+    @Override
+    public IPage<Lend> listPage(Page<Lend> pageParam, Long userId) {
+        QueryWrapper<Lend> lendWrapper = new QueryWrapper<>();
+        lendWrapper.eq("user_id", userId).orderByDesc("id");
+        return baseMapper.selectPage(pageParam, lendWrapper);
     }
 }
